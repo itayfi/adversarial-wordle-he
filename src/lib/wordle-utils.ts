@@ -13,6 +13,20 @@ export function normalizeHebrew(word: string): string {
 }
 
 /**
+ * Convert Hebrew letter to final form when needed.
+ * @param letter The Hebrew letter (string)
+ * @return Final form (string).
+ */
+export function finalizeLetter(letter: string) {
+  return letter
+    .replace(/מ/g, "ם")
+    .replace(/פ/g, "ף")
+    .replace(/נ/g, "ן")
+    .replace(/כ/g, "ך")
+    .replace(/צ/g, "ץ");
+}
+
+/**
  * Calculate the coloring for a Wordle guess.
  * @param guess - The guessed word (string).
  * @param target - The target word (string).
