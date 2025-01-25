@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils.ts";
 import { SettingsDialog } from "@/components/settings.tsx";
 import { isValidInHardMode } from "@/lib/hard-mode.ts";
+import ReactConfetti from "react-confetti";
 
 function App() {
   const addWord = useWordleStore(({ addWord }) => addWord);
@@ -25,6 +26,7 @@ function App() {
   return (
     <>
       <Toaster position="top-center" />
+      {isWin ? <ReactConfetti recycle={false} /> : null}
       <div className="max-w-[432px] min-h-dvh flex flex-col mx-auto px-6 pb-6 gap-6">
         <div className="border-b">
           <SettingsDialog />
