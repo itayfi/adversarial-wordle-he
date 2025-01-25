@@ -46,12 +46,14 @@ export const useWordleStore = create<WordleStore>((set, get) => ({
   },
   async addWord(word: string) {
     await acceptedWordsPromise;
-    if (!get().allWords.has(normalizeHebrew(word))) {
+    const allWordsSet = get().allWords;
+    if (!allWordsSet.has(normalizeHebrew(word))) {
       return false;
     }
     const { remainingWords, coloring } = await getBestColoring(
       word,
-      get().remainingWords,
+      get().remainingWords ??
+        (get().settings.expandedMode ? allWordsSet : null),
     );
     set(({ guesses }) => ({
       guesses: [...guesses, { word, coloring }],
