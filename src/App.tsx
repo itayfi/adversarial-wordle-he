@@ -9,11 +9,13 @@ import { Toaster } from "@/components/ui/sonner.tsx";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils.ts";
 import { SettingsDialog } from "@/components/settings.tsx";
+import { isValidInHardMode } from "@/lib/hard-mode.ts";
 
 function App() {
   const addWord = useWordleStore(({ addWord }) => addWord);
   const reset = useWordleStore(({ reset }) => reset);
   const guesses = useWordleStore(({ guesses }) => guesses);
+  const hardMode = useWordleStore(({ settings: { hardMode } }) => hardMode);
   const [typedWord, setTypedWord] = useState("");
 
   const isWin = guesses.some(({ coloring }) =>
@@ -22,7 +24,7 @@ function App() {
 
   return (
     <>
-      <Toaster />
+      <Toaster position="top-center" />
       <div className="max-w-[432px] min-h-dvh flex flex-col mx-auto px-6 pb-6 gap-6">
         <div className="border-b">
           <SettingsDialog />
@@ -61,20 +63,20 @@ function App() {
             if (typedWord.length < 5) {
               return;
             }
+            if (hardMode && !isValidInHardMode(typedWord)) {
+              toast("ביקשת מצב קשה? אז המילה לא מתאימה");
+              return;
+            }
             addWord(typedWord)
               .then((success) => {
                 if (success) {
                   setTypedWord("");
                 } else {
-                  toast("לא להמציא לי כאן מילים", {
-                    position: "top-center",
-                  });
+                  toast("לא להמציא לי כאן מילים");
                 }
               })
               .catch(() => {
-                toast("הבאג לא אצלי הוא אצלך", {
-                  position: "top-center",
-                });
+                toast("הבאג לא אצלי הוא אצלך");
               });
           }}
         />
