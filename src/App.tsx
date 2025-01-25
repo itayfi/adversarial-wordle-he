@@ -8,6 +8,7 @@ import { useWordleStore } from "@/lib/store.ts";
 import { Toaster } from "@/components/ui/sonner.tsx";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils.ts";
+import { SettingsDialog } from "@/components/settings.tsx";
 
 function App() {
   const addWord = useWordleStore(({ addWord }) => addWord);
@@ -22,7 +23,10 @@ function App() {
   return (
     <>
       <Toaster />
-      <div className="max-w-[432px] min-h-dvh flex flex-col mx-auto px-6 pt-6 pb-6 gap-6">
+      <div className="max-w-[432px] min-h-dvh flex flex-col mx-auto px-6 pb-6 gap-6">
+        <div className="border-b">
+          <SettingsDialog />
+        </div>
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-center">
           וורדל מניאק
         </h1>
