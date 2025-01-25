@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils.ts";
 import { SettingsDialog } from "@/components/settings.tsx";
 import { isValidInHardMode } from "@/lib/hard-mode.ts";
 import ReactConfetti from "react-confetti";
+import { motion } from "motion/react";
+import { Share2 } from "lucide-react";
 
 function App() {
   const addWord = useWordleStore(({ addWord }) => addWord);
@@ -22,6 +24,27 @@ function App() {
   const isWin = guesses.some(({ coloring }) =>
     coloring?.every((x) => x === "green"),
   );
+
+  const onShare = () => {
+    const emojis = guesses
+      .map(
+        ({ coloring }) =>
+          coloring
+            ?.map(
+              (c) =>
+                ({
+                  green: "🟩",
+                  yellow: "🟨",
+                  gray: "⬜",
+                })[c],
+            )
+            .join("") ?? "",
+      )
+      .join("\n");
+    void navigator.share({
+      text: `ניצחתי את המניאק ב־${guesses.length} צעדים\n${emojis}\n\n${location.href}`,
+    });
+  };
 
   return (
     <>
@@ -82,16 +105,41 @@ function App() {
               });
           }}
         />
-        <div className="text-center">
-          <Button
-            onClick={(event) => {
-              reset();
-              event.currentTarget.blur();
-            }}
+        <motion.div
+          className="flex justify-center"
+          layout
+          animate={isWin ? { gap: "8px" } : { gap: 0 }}
+        >
+          <motion.div
+            layout
+            key="share"
+            initial={{ opacity: 0, width: 0 }}
+            animate={
+              isWin ? { opacity: 1, width: "auto" } : { opacity: 0, width: 0 }
+            }
+            transition={{ duration: 0.5 }}
           >
-            משחק חדש
-          </Button>
-        </div>
+            <Button variant="outline" onClick={onShare}>
+              <Share2 />
+              שיתוף
+            </Button>
+          </motion.div>
+          <motion.div
+            className="relative"
+            layout
+            key="new"
+            transition={{ duration: 0.5 }}
+          >
+            <Button
+              onClick={(event) => {
+                reset();
+                event.currentTarget.blur();
+              }}
+            >
+              משחק חדש
+            </Button>
+          </motion.div>
+        </motion.div>
       </div>
     </>
   );
