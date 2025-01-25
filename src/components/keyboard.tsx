@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button.tsx";
 import { CornerDownLeft, Delete } from "lucide-react";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils.ts";
+import { useWordleStore } from "@/lib/store.ts";
+import { normalizeHebrew } from "@/lib/wordle-utils.ts";
 
 const REGEX_HEBREW_SINGLE = /^[א-ת]$/;
 
@@ -85,6 +87,24 @@ export const Keyboard = ({
   );
 };
 
+const useLetterColor = (letter: string) => {
+  const guesses = useWordleStore(({ guesses }) => guesses);
+  const colors = guesses.flatMap(({ word, coloring }) => {
+    const normalizedWord = normalizeHebrew(word);
+    return coloring?.filter((_, i) => normalizedWord.charAt(i) === letter);
+  });
+  if (colors.includes("green")) {
+    return "green";
+  }
+  if (colors.includes("yellow")) {
+    return "yellow";
+  }
+  if (colors.includes("gray")) {
+    return "gray";
+  }
+  return null;
+};
+
 const KeyboardButton = ({
   letter,
   createKeyHandler,
@@ -92,10 +112,17 @@ const KeyboardButton = ({
   letter: string;
   createKeyHandler: (letter: string) => () => void;
 }) => {
+  const color = useLetterColor(letter);
+
   return (
     <Button
       onClick={createKeyHandler(letter)}
-      className="col-span-2 text-lg"
+      className={cn("col-span-2 text-lg transition-all duration-400", {
+        "bg-emerald-700 hover:bg-emerald-700/80": color === "green",
+        "bg-yellow-400 hover:bg-yellow-400/80": color === "yellow",
+        "bg-neutral-500 hover:bg-neutral-500/80": color === "gray",
+        "text-white": color !== null,
+      })}
       variant="secondary"
     >
       {letter}
