@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button.tsx";
 import { CornerDownLeft, Delete } from "lucide-react";
 import { useEffect } from "react";
+import { cn } from "@/lib/utils.ts";
 
 const REGEX_HEBREW_SINGLE = /^[א-ת]$/;
 
@@ -8,37 +9,45 @@ export const Keyboard = ({
   onKeyDown,
   onBackspace,
   onEnter,
+  disabled,
 }: {
   onKeyDown: (key: string) => void;
   onEnter: () => void;
   onBackspace: () => void;
+  disabled: boolean;
 }) => {
   const createKeyHandler = (key: string) => () => onKeyDown(key);
 
   useEffect(() => {
     const abort = new AbortController();
-    document.body.addEventListener(
-      "keydown",
-      (event) => {
-        if (REGEX_HEBREW_SINGLE.test(event.key)) {
-          onKeyDown(event.key);
-        }
-        if (event.key === "Backspace") {
-          onBackspace();
-        }
-        if (event.key === "Enter") {
-          onEnter();
-        }
-      },
-      {
-        signal: abort.signal,
-      },
-    );
+    if (!disabled) {
+      document.body.addEventListener(
+        "keydown",
+        (event) => {
+          if (REGEX_HEBREW_SINGLE.test(event.key)) {
+            onKeyDown(event.key);
+          }
+          if (event.key === "Backspace") {
+            onBackspace();
+          }
+          if (event.key === "Enter") {
+            onEnter();
+          }
+        },
+        {
+          signal: abort.signal,
+        },
+      );
+    }
     return () => abort.abort();
-  }, [onBackspace, onEnter, onKeyDown]);
+  }, [disabled, onBackspace, onEnter, onKeyDown]);
 
   return (
-    <div className="grid grid-cols-[repeat(19,1fr)] gap-2 max-w-96">
+    <div
+      className={cn("grid grid-cols-[repeat(19,1fr)] gap-2 max-w-96", {
+        "pointer-events-none": disabled,
+      })}
+    >
       {/*Row 1*/}
       <Button className="col-span-3" variant="secondary" onClick={onBackspace}>
         <Delete />
