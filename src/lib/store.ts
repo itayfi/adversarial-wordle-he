@@ -30,14 +30,40 @@ const acceptedWordsPromise = import("@/assets/accepted-words.json").then(
   },
 );
 
+const DEFAULT_SETTINGS = {
+  hardMode: false,
+  expandedMode: false,
+};
+const getDefaultSettings = () => {
+  const raw = localStorage.getItem("settings");
+  if (raw === null) {
+    return DEFAULT_SETTINGS;
+  }
+  let parsed = null;
+  try {
+    parsed = JSON.parse(raw) as unknown;
+  } catch {
+    return DEFAULT_SETTINGS;
+  }
+  if (parsed === null || typeof parsed !== "object") {
+    return DEFAULT_SETTINGS;
+  }
+  if (!("hardMode" in parsed) || !("expandedMode" in parsed)) {
+    return DEFAULT_SETTINGS;
+  }
+  const hardMode = parsed.hardMode;
+  const expandedMode = parsed.expandedMode;
+  if (typeof hardMode !== "boolean" || typeof expandedMode !== "boolean") {
+    return DEFAULT_SETTINGS;
+  }
+  return { hardMode, expandedMode };
+};
+
 export const useWordleStore = create<WordleStore>((set, get) => ({
   allWords: new Set(),
   remainingWords: null,
   guesses: [],
-  settings: {
-    hardMode: false,
-    expandedMode: false,
-  },
+  settings: getDefaultSettings(),
   reset: () => {
     set({
       remainingWords: null,
@@ -62,8 +88,12 @@ export const useWordleStore = create<WordleStore>((set, get) => ({
     return true;
   },
   setSettings(value) {
-    set(({ settings }) => ({
-      settings: { ...settings, ...value },
-    }));
+    set(({ settings }) => {
+      const newSettings = { ...settings, ...value };
+      localStorage.setItem("settings", JSON.stringify(newSettings));
+      return {
+        settings: newSettings,
+      };
+    });
   },
 }));

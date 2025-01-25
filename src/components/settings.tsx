@@ -33,13 +33,13 @@ export const SettingsDialog = () => {
             value={settings.hardMode}
             onChange={(hardMode) => setSettings({ hardMode })}
             name="מצב קשה"
-            description="אפשר להשתמש רק במילים שמתאימות לרמזים שניתנו עד עכשיו."
+            description="ניתן להשתמש רק במילים שתואמות לרמזים שניתנו עד עכשיו."
           />
           <SwitchCard
             value={settings.expandedMode}
             onChange={(expandedMode) => setSettings({ expandedMode })}
             name="אוצר מילים מורחב"
-            description="המילה שצריך לנחש תגיע מתוך מילון מורחב, כולל הטיות ומילים פחות נפוצות."
+            description="המילים האפשריות נבחרות מתוך אוצר מילים רחב, כולל מילים נדירות והטיות נוספות."
           />
         </div>
       </DialogContent>
