@@ -1,5 +1,8 @@
 import { create } from "zustand/react";
-import { calculateWordleColoring } from "@/lib/wordle-utils.ts";
+import {
+  calculateWordleColoring,
+  normalizeHebrew,
+} from "@/lib/wordle-utils.ts";
 import { getBestColoring } from "@/lib/get-best-coloring.ts";
 
 type WordleStore = {
@@ -15,7 +18,9 @@ type WordleStore = {
 
 const acceptedWordsPromise = import("@/assets/accepted-words.json").then(
   (module) => {
-    useWordleStore.setState({ allWords: new Set(module.default) });
+    useWordleStore.setState({
+      allWords: new Set(module.default.map((w) => normalizeHebrew(w))),
+    });
   },
 );
 
@@ -31,7 +36,7 @@ export const useWordleStore = create<WordleStore>((set, get) => ({
   },
   async addWord(word: string) {
     await acceptedWordsPromise;
-    if (!get().allWords.has(word)) {
+    if (!get().allWords.has(normalizeHebrew(word))) {
       return false;
     }
     const { remainingWords, coloring } = await getBestColoring(
