@@ -32,6 +32,9 @@ export async function getBestColoring(
   let bestWords: string[] = [];
 
   for (const [coloring, words] of Object.entries(guessResults)) {
+    if (coloring === "22222" && Object.entries(guessResults).length > 1) {
+      continue;
+    }
     if (words.length > bestWords.length) {
       bestColoring = coloring;
       bestWords = words;
