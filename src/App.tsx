@@ -5,6 +5,8 @@ import { useState } from "react";
 
 import "@/lib/get-best-coloring.ts";
 import { useWordleStore } from "@/lib/store.ts";
+import { Toaster } from "@/components/ui/sonner.tsx";
+import { toast } from "sonner";
 
 function App() {
   const addWord = useWordleStore(({ addWord }) => addWord);
@@ -18,6 +20,7 @@ function App() {
 
   return (
     <div className="max-w-[432px] min-h-dvh flex flex-col mx-auto px-6 pt-12 pb-6 gap-6">
+      <Toaster />
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-center">
         וורדל מניאק
       </h1>
@@ -41,12 +44,24 @@ function App() {
         }
         onBackspace={() => setTypedWord((word) => word.slice(0, -1))}
         onEnter={() => {
-          setTypedWord("");
-          addWord(typedWord).then((success) => {
-            if (!success) {
-              alert("מילה לא תקינה");
-            }
-          });
+          if (typedWord.length < 5) {
+            return;
+          }
+          addWord(typedWord)
+            .then((success) => {
+              if (success) {
+                setTypedWord("");
+              } else {
+                toast("המילה לא קיימת במילון", {
+                  position: "top-center",
+                });
+              }
+            })
+            .catch(() => {
+              toast("אופסי", {
+                position: "top-center",
+              });
+            });
         }}
       />
       <div className="text-center">
