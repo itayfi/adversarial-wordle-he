@@ -97,3 +97,16 @@ export const useWordleStore = create<WordleStore>((set, get) => ({
     });
   },
 }));
+
+// @ts-expect-error Defined here
+window.cheat = () => {
+  useWordleStore.setState(({ guesses }) => ({
+    guesses: [
+      ...guesses,
+      {
+        word: "וורדל",
+        coloring: ["green", "green", "green", "green", "green"],
+      },
+    ],
+  }));
+};

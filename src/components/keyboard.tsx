@@ -46,12 +46,16 @@ export const Keyboard = ({
 
   return (
     <div
-      className={cn("grid grid-cols-[repeat(19,1fr)] gap-2 max-w-96", {
+      className={cn("grid grid-cols-[1.5fr_repeat(18,1fr)] gap-1", {
         "pointer-events-none": disabled,
       })}
     >
       {/*Row 1*/}
-      <Button className="col-span-3" variant="secondary" onClick={onBackspace}>
+      <Button
+        className="col-span-3 h-11 me-1"
+        variant="secondary"
+        onClick={onBackspace}
+      >
         <Delete />
       </Button>
       <KeyboardButton letter="פ" createKeyHandler={createKeyHandler} />
@@ -72,7 +76,7 @@ export const Keyboard = ({
       <KeyboardButton letter="ד" createKeyHandler={createKeyHandler} />
       <KeyboardButton letter="ש" createKeyHandler={createKeyHandler} />
       {/* Row 3*/}
-      <Button className="col-span-3" variant="secondary" onClick={onEnter}>
+      <Button className="col-span-3 h-11 me-1" onClick={onEnter}>
         <CornerDownLeft />
       </Button>
       <KeyboardButton letter="ת" createKeyHandler={createKeyHandler} />
@@ -117,7 +121,7 @@ const KeyboardButton = ({
   return (
     <Button
       onClick={createKeyHandler(letter)}
-      className={cn("col-span-2 text-lg transition-all duration-400", {
+      className={cn("col-span-2 text-lg transition-all duration-400 h-11", {
         "bg-emerald-700 hover:bg-emerald-700/80": color === "green",
         "bg-yellow-400 hover:bg-yellow-400/80": color === "yellow",
         "bg-neutral-500 hover:bg-neutral-500/80": color === "gray",

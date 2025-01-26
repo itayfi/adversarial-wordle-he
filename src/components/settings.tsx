@@ -10,17 +10,27 @@ import { Settings } from "lucide-react";
 import { Switch } from "@/components/ui/switch.tsx";
 import { useWordleStore } from "@/lib/store.ts";
 import { DialogDescription } from "@radix-ui/react-dialog";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip.tsx";
 
 export const SettingsDialog = () => {
   const settings = useWordleStore(({ settings }) => settings);
   const setSettings = useWordleStore(({ setSettings }) => setSettings);
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Settings />
-        </Button>
-      </DialogTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DialogTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <Settings />
+            </Button>
+          </DialogTrigger>
+        </TooltipTrigger>
+        <TooltipContent>הגדרות</TooltipContent>
+      </Tooltip>
       <DialogContent aria-description="הגדרות">
         <DialogHeader>
           <DialogTitle>הגדרות</DialogTitle>

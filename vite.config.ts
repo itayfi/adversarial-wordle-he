@@ -11,7 +11,7 @@ export default defineConfig({
       },
     }),
   ],
-  base: "/adversarial-wordle-he/",
+  base: "/wordass/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
