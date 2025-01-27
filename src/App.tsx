@@ -97,25 +97,23 @@ function App() {
               : " אם בכלל אפשר לקרוא לזה ניצחון."}
           </div>
         ) : null}
-        <motion.div
-          className="flex justify-center gap-2"
-          initial={{ opacity: 0, translateY: "100%" }}
-          animate={
-            isWin
-              ? { opacity: 1, translateY: 0 }
-              : { opacity: 0, translateY: "100%" }
-          }
-          transition={{ duration: 0.4, type: "spring" }}
-        >
-          <Button variant="outline" onClick={onShare}>
-            <Share2 />
-            שיתוף
-          </Button>
-          <Button variant="outline" onClick={onReset}>
-            <RotateCcw />
-            משחק חדש
-          </Button>
-        </motion.div>
+        {isWin && (
+          <motion.div
+            className="flex justify-center gap-2"
+            initial={{ opacity: 0, translateY: "100%" }}
+            animate={{ opacity: 1, translateY: 0 }}
+            transition={{ duration: 0.4, type: "spring" }}
+          >
+            <Button variant="outline" onClick={onShare}>
+              <Share2 />
+              שיתוף
+            </Button>
+            <Button variant="outline" onClick={onReset}>
+              <RotateCcw />
+              משחק חדש
+            </Button>
+          </motion.div>
+        )}
         <Keyboard
           disabled={isWin}
           onKeyDown={(key) =>
