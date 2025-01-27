@@ -104,7 +104,7 @@ window.cheat = () => {
     guesses: [
       ...guesses,
       {
-        word: "וורדל",
+        word: "וורדס",
         coloring: ["green", "green", "green", "green", "green"],
       },
     ],
