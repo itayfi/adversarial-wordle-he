@@ -2,6 +2,7 @@ import { Keyboard } from "@/components/keyboard";
 import { Button } from "@/components/ui/button.tsx";
 import { WordleRow } from "@/components/wordle-row.tsx";
 import { SyntheticEvent, useState } from "react";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 import "@/lib/get-best-coloring.ts";
 import { useWordleStore } from "@/lib/store.ts";
@@ -26,6 +27,7 @@ function App() {
   const guesses = useWordleStore(({ guesses }) => guesses);
   const hardMode = useWordleStore(({ settings: { hardMode } }) => hardMode);
   const [typedWord, setTypedWord] = useState("");
+  const { width, height } = useWindowSize();
 
   const isWin = guesses.some(({ coloring }) =>
     coloring?.every((x) => x === "green"),
@@ -60,7 +62,13 @@ function App() {
   return (
     <TooltipProvider>
       <Toaster position="top-center" />
-      {isWin ? <ReactConfetti recycle={false} /> : null}
+      {isWin ? (
+        <ReactConfetti
+          recycle={false}
+          width={width ?? undefined}
+          height={height ?? undefined}
+        />
+      ) : null}
       <div className="max-w-[432px] min-h-dvh flex flex-col mx-auto px-6 pb-6 gap-6">
         <div className="border-b flex flex-row">
           <SettingsDialog />
