@@ -20,6 +20,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx";
+import { HelpDialog } from "@/components/help.tsx";
 
 function App() {
   const addWord = useWordleStore(({ addWord }) => addWord);
@@ -70,8 +71,9 @@ function App() {
         />
       ) : null}
       <div className="max-w-[432px] min-h-dvh flex flex-col mx-auto px-6 pb-6 gap-6">
-        <div className="border-b flex flex-row">
+        <div className="border-b flex flex-row gap-2 p-2">
           <SettingsDialog />
+          <HelpDialog />
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -138,7 +140,7 @@ function App() {
               return;
             }
             if (hardMode && !isValidInHardMode(typedWord)) {
-              toast("ביקשת מצב קשה? אז המילה לא מתאימה");
+              toast("יהיה לך קל מדי לא חבל?");
               return;
             }
             addWord(typedWord)
